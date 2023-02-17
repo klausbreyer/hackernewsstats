@@ -1,41 +1,72 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 	"net/http"
-	"os"
-	"sync"
+	"time"
 
 	"v01.io/hackernewsstats/flogger"
 )
 
-func downloadFile(filepath string, url string, wg *sync.WaitGroup) (err error) {
-	flogger.Infof("fetching", url)
-	// Create the file
-	out, err := os.Create(filepath)
-	if err != nil {
-		return err
-	}
-	defer out.Close()
+type StoryRaw struct {
+	Id    int    `json:"id"`
+	Score int    `json:"score"`
+	Time  int    `json:"time"`
+	Title string `json:"title"`
+	Type  string `json:"type"`
+	Url   string `json:"url"`
+}
 
-	// Get the data
-	resp, err := http.Get(url)
-	if err != nil {
-		return err
-	}
-	defer resp.Body.Close()
+type Story struct {
+	Id        int
+	Score     int
+	CreatedAt time.Time
+	Title     string
+	Url       string
+}
 
-	// Check server response
-	if resp.StatusCode != http.StatusOK {
-		return fmt.Errorf("bad status: %s", resp.Status)
+func downloadEntry(id int) (Story, bool) {
+	url := fmt.Sprintf("https://hacker-news.firebaseio.com/v0/item/%d.json", id)
+
+	client := http.Client{}
+
+	req, err := http.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		flogger.Errorf("", err)
 	}
 
-	// Writer the body to file
-	_, err = io.Copy(out, resp.Body)
-	if err != nil {
-		return err
+	res, getErr := client.Do(req)
+	if getErr != nil {
+		flogger.Errorf("", getErr)
 	}
-	wg.Done()
-	return nil
+
+	if res.Body != nil {
+		defer res.Body.Close()
+	}
+
+	body, readErr := io.ReadAll(res.Body)
+	if readErr != nil {
+		flogger.Errorf("", readErr)
+	}
+
+	raw := StoryRaw{}
+	jsonErr := json.Unmarshal(body, &raw)
+	if jsonErr != nil {
+		flogger.Errorf("", jsonErr)
+	}
+
+	if raw.Type != "story" {
+		return Story{}, false
+	}
+
+	story := Story{
+		Id:        raw.Id,
+		Score:     raw.Score,
+		CreatedAt: time.UnixMilli(int64(raw.Time * 1000)),
+		Title:     raw.Title,
+		Url:       raw.Url,
+	}
+	return story, true
 }
