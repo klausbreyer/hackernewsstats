@@ -17,7 +17,7 @@ func main() {
 }
 
 const MAX = 34835291
-const THREADS = 10
+const THREADS = 4
 
 func run() error {
 	flogger.Infof("starting...", nil)
