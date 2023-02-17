@@ -3,3 +3,5 @@ key.json
 uploads
 .env
 .vscode
+tmp
+.DS_Store
