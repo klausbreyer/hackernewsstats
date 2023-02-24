@@ -1,28 +1,20 @@
-package main
+package pkg
 
 import (
 	"fmt"
-	"os"
 	"sync"
 
 	_ "github.com/go-sql-driver/mysql"
 	"v01.io/hackernewsstats/flogger"
 )
 
-func main() {
-	if err := run(); err != nil {
-		fmt.Fprintf(os.Stderr, "%s\n", err)
-		os.Exit(1)
-	}
-}
-
 const MAX = 34835291
 const THREADS = 4
 
-func run() error {
+func RunIngest() error {
 	flogger.Infof("starting...", nil)
 
-	START := getMaxId()
+	START := GetMaxId()
 	flogger.Infof("Max Id: ", START)
 
 	var ch = make(chan int, MAX) // This number 50 can be anything as long as it's larger than xthreads
@@ -45,7 +37,7 @@ func run() error {
 				flogger.Debugf("Entry:", entry)
 				flogger.Debugf(fmt.Sprintf("Fetched %d/%d, %.2f", a, MAX, float64(a)/float64(MAX)*float64(100)))
 
-				upsert(entry)
+				Upsert(entry)
 			}
 		}()
 	}

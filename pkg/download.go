@@ -1,4 +1,4 @@
-package main
+package pkg
 
 import (
 	"encoding/json"
@@ -10,21 +10,13 @@ import (
 	"v01.io/hackernewsstats/flogger"
 )
 
-type StoryRaw struct {
+type storyRaw struct {
 	Id    int    `json:"id"`
 	Score int    `json:"score"`
 	Time  int    `json:"time"`
 	Title string `json:"title"`
 	Type  string `json:"type"`
 	Url   string `json:"url"`
-}
-
-type Story struct {
-	Id        int
-	Score     int
-	CreatedAt time.Time
-	Title     string
-	Url       string
 }
 
 func downloadEntry(id int) (Story, bool) {
@@ -51,7 +43,7 @@ func downloadEntry(id int) (Story, bool) {
 		flogger.Errorf("", readErr)
 	}
 
-	raw := StoryRaw{}
+	raw := storyRaw{}
 	jsonErr := json.Unmarshal(body, &raw)
 	if jsonErr != nil {
 		flogger.Errorf("", jsonErr)

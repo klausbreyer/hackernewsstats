@@ -6,3 +6,4 @@ uploads
 tmp
 .DS_Store
 hackernewsstats
+ingest/ingest

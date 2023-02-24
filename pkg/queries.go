@@ -1,15 +1,24 @@
-package main
+package pkg
 
 import (
 	"context"
 	"database/sql"
 	"fmt"
 	"os"
+	"time"
 
 	"v01.io/hackernewsstats/flogger"
 )
 
-func getMaxId() int {
+type Story struct {
+	Id        int
+	Score     int
+	CreatedAt time.Time
+	Title     string
+	Url       string
+}
+
+func GetMaxId() int {
 	db, err := sql.Open("mysql", fmt.Sprintf("%s:%s@tcp(127.0.0.1:3306)/hackernewsstats", os.Getenv("DB_USER"), os.Getenv("DB_PASS")))
 
 	// if there is an error opening the connection, handle it
@@ -29,8 +38,7 @@ func getMaxId() int {
 
 }
 
-func upsert(story Story) {
-
+func Upsert(story Story) {
 	db, err := sql.Open("mysql", fmt.Sprintf("%s:%s@tcp(127.0.0.1:3306)/hackernewsstats", os.Getenv("DB_USER"), os.Getenv("DB_PASS")))
 	// if there is an error opening the connection, handle it
 	if err != nil {
@@ -43,7 +51,7 @@ func upsert(story Story) {
 	var probe int
 	err = db.QueryRow("SELECT id FROM hackernewsstats WHERE id = ?", story.Id).Scan(&probe)
 	if err != nil {
-		// flogger.Errorf("upsert", story, err.Error()) // proper error handling instead of panic in your app
+		flogger.Errorf("upsert", story, err.Error()) // proper error handling instead of panic in your app
 	}
 	if probe != 0 {
 
