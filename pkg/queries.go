@@ -18,6 +18,15 @@ type Story struct {
 	Url       string
 }
 
+const START_YEAR = 2007
+
+type Tld struct {
+	Name     string
+	Category string //original,country,generic,geographic,brand,special
+	Scores   []int  //one entry for each year. Starting with 2007.
+	Counts   []int
+}
+
 func GetMaxId() int {
 	db, err := sql.Open("mysql", fmt.Sprintf("%s:%s@tcp(127.0.0.1:3306)/hackernewsstats", os.Getenv("DB_USER"), os.Getenv("DB_PASS")))
 
