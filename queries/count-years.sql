@@ -16,7 +16,7 @@ SUM(score) as scores
 
 FROM hackernewsstats
 WHERE url != ""
-AND YEAR(createdAt)='2008'
+AND YEAR(createdAt)= ?
 GROUP BY tld
 HAVING tld != ""
 order by counts DESC

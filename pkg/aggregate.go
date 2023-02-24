@@ -7,5 +7,8 @@ import (
 
 func RunAggregate() error {
 	flogger.Infof("starting...", nil)
+
+	year := AggregateYear(2007)
+	flogger.Pretty(year)
 	return nil
 }

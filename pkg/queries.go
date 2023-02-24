@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
+	"log"
 	"os"
 	"time"
 
@@ -25,6 +26,54 @@ type Tld struct {
 	Category string //original,country,generic,geographic,brand,special
 	Scores   []int  //one entry for each year. Starting with 2007.
 	Counts   []int
+}
+
+type YearRow struct {
+	Tld    string
+	Counts int
+	Scores int
+}
+
+func AggregateYear(year int) []YearRow {
+	db, err := sql.Open("mysql", fmt.Sprintf("%s:%s@tcp(127.0.0.1:3306)/hackernewsstats", os.Getenv("DB_USER"), os.Getenv("DB_PASS")))
+
+	// if there is an error opening the connection, handle it
+	if err != nil {
+		panic(err.Error())
+	}
+
+	defer db.Close()
+	var (
+		tld    string
+		counts int
+		scores int
+	)
+
+	query, err := os.ReadFile("./queries/count-years.sql")
+	if err != nil {
+		panic(err.Error())
+	}
+
+	rows, err := db.Query(string(query), year)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer rows.Close()
+
+	result := []YearRow{}
+	for rows.Next() {
+		err := rows.Scan(&tld, &counts, &scores)
+		if err != nil {
+			log.Fatal(err)
+		}
+		result = append(result, YearRow{tld, counts, scores})
+	}
+
+	err = rows.Err()
+	if err != nil {
+		log.Fatal(err)
+	}
+	return result
 }
 
 func GetMaxId() int {

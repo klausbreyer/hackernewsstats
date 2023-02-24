@@ -23,8 +23,11 @@ func getLogrus() commonMinimumDenominator {
 }
 
 func get() commonMinimumDenominator {
-
 	return getLogrus()
+}
+
+func Pretty(a interface{}) {
+	get().Debugf("%+v", a)
 }
 
 func Errorf(format string, a ...interface{}) {
