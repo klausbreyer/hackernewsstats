@@ -24,10 +24,6 @@ var LIST_ORIGINAL = []string{
 	".com",
 	".org",
 	".net",
-	".int",
-	".edu",
-	".gov",
-	".mil",
 }
 
 var LIST_GENERIC = []string{
@@ -372,7 +368,6 @@ var LIST_GENERIC = []string{
 	".now",
 	".ntt",
 	".observer",
-	".org",
 	".one",
 	".ong",
 	".onl",
@@ -582,7 +577,6 @@ var LIST_GENERIC = []string{
 	".university",
 	".uno",
 	".vacations",
-	".ventures",
 	".vet",
 	".video",
 	".villas",

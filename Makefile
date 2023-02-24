@@ -15,3 +15,9 @@ aggregate:
 
 ingest:
 	 go run ./cmd/ingest
+
+persist:
+	cp tlds.json ../v01-hugo/static/js/hackernewsstats.json
+
+magic:
+	make aggregate && make persist
