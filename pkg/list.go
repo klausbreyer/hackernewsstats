@@ -1,5 +1,20 @@
 package pkg
 
+type CategoryMapping struct {
+	Category string
+	Endings  []string
+}
+
+var MAPPINGS = []CategoryMapping{
+	{"original", LIST_ORIGINAL},
+	{"generic", LIST_GENERIC},
+	{"sponsored", LIST_SPONSORED},
+	{"country", LIST_COUNTRY},
+	{"geographic", LIST_GEOGRAPHIC},
+	{"brand", LIST_BRAND},
+	{"special", LIST_SPECIAL},
+}
+
 /**
  * Source: https://en.wikipedia.org/wiki/List_of_Internet_top-level_domains
  * Date: 2022-02-24

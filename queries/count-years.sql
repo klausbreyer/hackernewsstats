@@ -1,5 +1,7 @@
 #https://stackoverflow.com/questions/9280336/mysql-query-to-extract-domains-from-urls
 SELECT
+CONCAT(
+".", # having the . in the end result
 SUBSTRING_INDEX(SUBSTRING_INDEX(SUBSTRING_INDEX(SUBSTRING_INDEX(SUBSTRING_INDEX(SUBSTRING_INDEX(SUBSTRING_INDEX(SUBSTRING_INDEX(SUBSTRING_INDEX(SUBSTRING_INDEX(url,
 '?', 1), # split on url params to remove weirdest stuff first
 '://', -1), # remove protocal http:// https:// ftp:// ...
@@ -10,7 +12,8 @@ SUBSTRING_INDEX(SUBSTRING_INDEX(SUBSTRING_INDEX(SUBSTRING_INDEX(SUBSTRING_INDEX(
 'www.', -1), # remove www.
 '.', 10), # keep TLD + domain name
 '.', -1), # keep tld
-'/', 1) as tld,
+'/', 1)
+) as tld,
 COUNT(*) as counts,
 SUM(score) as scores
 

@@ -22,10 +22,10 @@ type Story struct {
 const START_YEAR = 2007
 
 type Tld struct {
-	Name     string
-	Category string //original,country,generic,geographic,brand,special
-	Scores   []int  //one entry for each year. Starting with 2007.
-	Counts   []int
+	Ending   string `json:"ending"`
+	Category string `json:"category"` //original,country,generic,geographic,brand,special
+	Scores   []int  `json:"scores"`   //one entry for each year. Starting with 2007.
+	Counts   []int  `json:"counts"`
 }
 
 type YearRow struct {
