@@ -64,7 +64,7 @@ func downloadEntry(id int) (Story, bool) {
 	story := Story{
 		Id:        raw.Id,
 		Score:     raw.Score,
-		CreatedAt: time.UnixMilli(int64(raw.Time * 1000)),
+		CreatedAt: time.UnixMilli(int64(raw.Time) * 1000),
 		Title:     raw.Title,
 		Url:       raw.Url,
 	}
