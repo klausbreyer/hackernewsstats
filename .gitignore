@@ -8,3 +8,4 @@ tmp
 hackernewsstats
 ingest/ingest
 *.json
+dumps
