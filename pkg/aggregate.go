@@ -12,7 +12,7 @@ func RunAggregate() error {
 	flogger.Infof("starting...", nil)
 
 	var all [][]YearRow
-	for i := 2007; i <= 2018; i++ {
+	for i := 2007; i <= 2022; i++ {
 		year := AggregateYear(i)
 		all = append(all, year)
 	}
